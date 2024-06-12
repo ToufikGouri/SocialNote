@@ -6,11 +6,16 @@ export default {
   ],
   theme: {
     extend: {
-      colors:{
+      colors: {
         myPurple: "#8481FF",
         myGreen: "#4CD77B",
         myPink: "#FFDEDE",
-        myBlue: "#84C3DE"
+        myBlue: "#84C3DE",
+        myGrey: "#D9D9D9",
+
+        urgentRed: "#FB6868",
+        urgentOrange: "#FF985C",
+        urgentGreen: "#46BEA6",
       }
     },
   },
