@@ -20,6 +20,10 @@ const noteSchema = new mongoose.Schema({
     favorite: {
         type: Boolean,
         required: true
+    },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 
 
