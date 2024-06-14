@@ -1,4 +1,4 @@
-
+import axios from 'axios';
 import React, { useState } from 'react'
 import { Link } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
@@ -8,9 +8,36 @@ const Signup = () => {
     const [username, setUsername] = useState("")
     const [pass, setPass] = useState("")
 
-    const handleLogin = () => {
-        // manage the logic of right email and pass in if else block        
-        toast.success("Logged in successfully")
+    const handleLogin = async () => {
+
+        const newUsername = username.trim().toLowerCase()
+        // don't trim or lowercase passwords
+
+        if (newUsername.length < 3) {
+            toast.warn("Please enter valid username or email")
+        } else if (pass.length < 8) {
+            toast.warn("Password must be atleast 8 characters")
+        } else {
+
+            // if no error then try to login
+            try {
+
+                const userData = { password: pass }
+                if (username.includes("@gmail.com")) {
+                    userData.email = newUsername
+                } else {
+                    userData.username = newUsername
+                }
+
+                await axios.post("/api/v1/users/login", userData)
+
+                toast.success("Logged in successfully")
+            } catch (error) {
+                console.log("Axios error", error);       // remove this after
+                toast.error(error.response?.data?.message || "An error occurred")
+            }
+        }// if block ends here
+
     }
 
     return (
@@ -20,12 +47,12 @@ const Signup = () => {
 
                     <div className='flex flex-col items-center relative'>
                         <div className='my-2 mt-5'>
-                            <label htmlFor="username" className='font-semibold block'>Username or Email</label>
-                            <input onChange={(e) => setUsername(e.target.value)} type="text" className='rounded-md p-2 w-[270px] border border-black' id='username' placeholder='username or email' />
+                            <label htmlFor="username" className='font-semibold block'>Username or email</label>
+                            <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" className='rounded-md p-2 w-[270px] border border-black' id='username' placeholder='username or email' />
                         </div>
                         <div className='my-2'>
                             <label htmlFor="pass" className='font-semibold block'>Password</label>
-                            <input onChange={(e) => setPass(e.target.value)} type="password" className='rounded-md p-2 w-[270px] border border-black' id='pass' placeholder='password...' />
+                            <input value={pass} onChange={(e) => setPass(e.target.value)} type="password" className='rounded-md p-2 w-[270px] border border-black' id='pass' placeholder='password...' />
                         </div>
                         <button onClick={handleLogin} className='bg-myGreen flex w-full justify-center text-lg m-5 p-2 rounded-3xl hover:text-white hover:scale-105 hover:ease-in-out'>Login</button>
                         <div className='mb-5'>Don't have an account ? <Link to="/signup" className='text-myGreen' >Signup</Link> </div>

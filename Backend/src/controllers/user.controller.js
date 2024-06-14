@@ -2,10 +2,32 @@ import asyncHandler from "../utils/asyncHandler.js"
 import { User } from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
+import uploadOnCloudinary from "../utils/cloudinary.js"
+
+const generateAccessAndRefreshToken = async (userId) => {
+    try {
+
+        const user = await User.findById(userId)
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
+
+        // update the refresh token with the generated one
+        user.refreshToken = refreshToken
+
+        // now save the user
+        await user.save({ validateBeforeSave: false })
+        // to avoid for checking password field here unncesserily we use validateBeforeSave option
+
+        return { accessToken, refreshToken }
+
+    } catch (error) {
+        throw new Error("Something went wrong while generating refresh and access token");
+    }
+}
 
 const registerController = asyncHandler(async (req, res) => {
 
-    const { username, email, avatar, password } = req.body
+    const { username, email, password } = req.body
 
     // checking if user already exists
     const existerUser = await User.findOne({
@@ -13,12 +35,19 @@ const registerController = asyncHandler(async (req, res) => {
     })
 
     if (existerUser) {
-        throw new ApiError(401, "User with username or email already exists")
+        return res.status(401).json(new ApiError(401, "User with username or email already exists"))
+    }
+
+    // if user has provided the avatar image
+    const avatarLocalPath = req.file?.path
+    let avatarURL;
+    if (avatarLocalPath) {
+        avatarURL = await uploadOnCloudinary(avatarLocalPath)
     }
 
     // creating user
     const user = await User.create({
-        username, email, avatar, password
+        username, email, avatar: avatarURL, password
     })
 
     // checking if user created successfully and removing some fields
@@ -35,4 +64,53 @@ const registerController = asyncHandler(async (req, res) => {
 
 })
 
-export { registerController }
+const loginController = asyncHandler(async (req, res) => {
+
+    const { username, email, password } = req.body
+
+    if (!username && !email) {
+        return res.status(400).json(new ApiError(400, "Username or email is required"))
+    }
+
+    if (!password) {
+        return res.status(400).json(new ApiError(400, "Password is required"))
+    }
+
+    const user = await User.findOne({
+        $or: [{ username }, { email }]
+    })
+
+    if (!user) {
+        return res.status(400).json(new ApiError(400, "User does not exist"))
+    }
+
+    const isPasswordValid = await user.isPasswordCorrect(password)
+
+    if (!isPasswordValid) {
+        return res.status(400).json(new ApiError(400, "Invalid user credentials"))
+    }
+
+    // reached till here means the credentials are right so generate the tokens
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(user._id)
+
+    const loggedInUser = await User.findById(user._id)
+        .select("-password -refreshToken")
+
+    // options for cookie-parser
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+
+    return res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200,
+            { user: loggedInUser, accessToken, refreshToken },
+            "User logged in successfully")
+        )
+
+})
+
+
+export { registerController, loginController }
