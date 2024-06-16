@@ -29,7 +29,11 @@ const Signup = () => {
                     userData.username = newUsername
                 }
 
-                await axios.post("/api/v1/users/login", userData)
+                const user = await axios.post("/api/v1/users/login", userData).then((res) => res.data.data.user)
+
+                localStorage.setItem("user", JSON.stringify(user))
+
+                console.log("The user", user);
 
                 toast.success("Logged in successfully")
             } catch (error) {
