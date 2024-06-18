@@ -13,6 +13,7 @@ const Navbar = () => {
     const dispatch = useDispatch()
     const [modalOpen, setModalOpen] = useState(false)
 
+    console.log(user);
 
     useEffect(() => {
         dispatch(getUserData())
@@ -53,8 +54,8 @@ const Navbar = () => {
                 overlayClassName="fixed inset-0 flex items-center justify-center"
             >
                 <div className='flex py-2 flex-col items-center'>
-                    <button className='w-4/5 p-2 text-start font-medium rounded-md hover:bg-black hover:bg-opacity-20' >Profile</button>
-                    <button onClick={handleLogout} className='w-4/5 p-2 text-start font-medium rounded-md hover:bg-black hover:bg-opacity-20' >Logout</button>
+                    <button className='w-4/5 p-2 text-start font-medium rounded-md hover:text-white hover:bg-black hover:bg-opacity-20' >Profile</button>
+                    <button onClick={handleLogout} className='w-4/5 p-2 text-start font-medium rounded-md hover:text-white hover:bg-black hover:bg-opacity-20' >Logout</button>
                 </div>
             </Modal>
         </>

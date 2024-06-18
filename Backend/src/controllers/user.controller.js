@@ -99,7 +99,8 @@ const loginController = asyncHandler(async (req, res) => {
     // options for cookie-parser
     const options = {
         httpOnly: true,
-        secure: true
+        secure: true,
+        maxAge: 30 * 60 * 60 * 24 * 1000
     }
 
     return res.status(200)

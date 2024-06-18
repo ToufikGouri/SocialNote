@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react'
 import { Link } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios"
+import { useDispatch } from 'react-redux';
+import { setUserData, setUserLog } from '../redux/userSlice';
 
 const Signup = () => {
 
@@ -11,7 +13,7 @@ const Signup = () => {
     const [pass, setPass] = useState("")
     const [confPass, setConfPass] = useState("")
     const avatarRef = useRef(null)
-
+    const dispatch = useDispatch()
 
     const handleCreate = async () => {
 
@@ -41,12 +43,14 @@ const Signup = () => {
             }
 
             try {
-                await axios.post("/api/v1/users/register", formData, {
+                const user = await axios.post("/api/v1/users/register", formData, {
                     headers: {
                         "Content-Type": "multipart/form-data"
                     }
                 })
 
+                dispatch(setUserLog(true))
+                dispatch(setUserData(user))
                 toast.success("Account created successfully")
             } catch (error) {
                 console.log("Axios error", error);       // remove this after
