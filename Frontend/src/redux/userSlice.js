@@ -12,7 +12,7 @@ export const getUserData = createAsyncThunk(
 export const getUserNotes = createAsyncThunk(
     "user/fetchUserNotes",
     async () => {
-        const response = await axios.get("/api/v1/notes/")
+        const response = await axios.get("/api/v1/notes")
         return response.data.data
     }
 )
@@ -61,7 +61,7 @@ export const userSlice = createSlice({
                 state.loading = false
             })
             .addCase(getUserNotes.rejected, (state) => {
-                state.userNotes = null
+                state.userNotes = []
                 state.loading = false
             })
 

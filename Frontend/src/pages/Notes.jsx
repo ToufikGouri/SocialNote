@@ -11,6 +11,7 @@ import axios from "axios"
 import MyModal from '../components/ModalNote'
 import { useDispatch, useSelector } from "react-redux"
 import { getUserNotes } from '../redux/userSlice'
+import { Link } from 'react-router-dom'
 
 const Notes = () => {
 
@@ -18,11 +19,12 @@ const Notes = () => {
     const [isNoteAdded, setIsNoteAdded] = useState(false)    // to update the page on change in notes, just toggle the state to activate the useEffect
     const notes = useSelector(state => state.userNotes)
     const loading = useSelector(state => state.loading)
+    const isLoggedIn = useSelector(state => state.isLoggedIn)
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getUserNotes())
-    }, [isNoteAdded])
+    }, [isNoteAdded, isLoggedIn])
 
     if (loading) {
         return <div className='h-[90vh] flex justify-center items-center' ><img className='h-32' src={LoadingLogo} alt="Loading..." /></div>
@@ -62,10 +64,21 @@ const Notes = () => {
                     //  When notes empty 
                     <div>
                         <img src={EmtpyNotes} alt="Your notes are empty" />
-                        <div className='flex'>
-                            <h1 className='text-xl sm:text-3xl'>Your notes are empty !!</h1>
-                            <button className='flex items-center mx-2 p-1 px-3 hover:bg-myPink border border-black rounded-3xl' onClick={() => setModalOpen(true)}><img src={AddLogo} className='h-6' alt='Add button'></img>Add note</button>
-                        </div>
+                        {
+                            isLoggedIn ? (
+                                <div className='flex items-center justify-center'>
+                                    <h1 className='text-xl sm:text-3xl'>Your notes are empty !!</h1>
+                                    <button className='flex items-center mx-2 p-1 px-3 hover:bg-myPink border border-black rounded-3xl' onClick={() => setModalOpen(true)}><img src={AddLogo} className='h-6' alt='Add button'></img>Add note</button>
+                                </div>
+                            ) : (
+                                <div className='flex items-center justify-center'>
+                                    <h1 className='text-xl sm:text-3xl'>Please signup first</h1>
+                                    <Link to="/signup"
+                                        className='bg-myGreen text-2xl mx-2 p-2 px-5 rounded-3xl max-md:left-1/3 max-md:bottom-5 hover:text-white hover:scale-105 hover:ease-in-out'>Signup
+                                    </Link>
+                                </div>
+                            )
+                        }
                     </div>
                 )}
 
