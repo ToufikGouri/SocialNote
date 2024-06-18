@@ -4,25 +4,29 @@ import TimeLogo from "../assets/Notes Assets/TimeLogo.png"
 import UrgencyLogo from "../assets/Notes Assets/UrgencyLogo.png"
 import HeartRed from "../assets/Notes Assets/Heart filled.png"
 import EmtpyNotes from "../assets/Notes Assets/EmptyNotes.png"
+import LoadingLogo from "../assets/Loading.svg"
 import { ToastContainer, toast } from 'react-toastify';
 import SubNote from '../components/SubNote'
 import axios from "axios"
 import MyModal from '../components/ModalNote'
-
+import { useDispatch, useSelector } from "react-redux"
+import { getUserNotes } from '../redux/userSlice'
 
 const Notes = () => {
 
     const [modalOpen, setModalOpen] = useState(false)
-    const [notes, setNotes] = useState([])
     const [isNoteAdded, setIsNoteAdded] = useState(false)    // to update the page on change in notes, just toggle the state to activate the useEffect
+    const notes = useSelector(state => state.userNotes)
+    const loading = useSelector(state => state.loading)
+    const dispatch = useDispatch()
 
     useEffect(() => {
-
-        ; (async () => {
-            await axios.get("/api/v1/notes/").then(res => setNotes(res.data.data))
-        })()
-
+        dispatch(getUserNotes())
     }, [isNoteAdded])
+
+    if (loading) {
+        return <div className='h-[90vh] flex justify-center items-center' ><img className='h-32' src={LoadingLogo} alt="Loading..." /></div>
+    }
 
 
     return (

@@ -48,6 +48,7 @@ const MyModal = ({ modalOpen, setModalOpen, onNoteAdded, methodHandle, _id, succ
             setTitle("")
             setDescription("")
             setTime("")
+            setUrgencyLevel("Low")
             setModalOpen(false)
         }// if block ends here
 
@@ -58,7 +59,7 @@ const MyModal = ({ modalOpen, setModalOpen, onNoteAdded, methodHandle, _id, succ
             isOpen={modalOpen}
             onRequestClose={() => setModalOpen(false)}
             contentLabel="Custom Modal"
-            className="w-4/5 sm:w-1/2 lg:w-1/3 rounded-xl bg-white"
+            className="w-4/5 sm:w-1/2 lg:w-1/3 rounded-xl outline-none bg-white"
             overlayClassName="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
         >
             <div className='flex flex-col items-center relative'>

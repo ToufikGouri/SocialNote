@@ -1,4 +1,3 @@
-import mongoose from "mongoose";
 import { Note } from "../models/notes.model.js"
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -85,7 +84,25 @@ const updateNoteController = asyncHandler(async (req, res) => {
 
 const deleteNoteController = asyncHandler(async (req, res) => {
 
+    const note = await Note.findById(req.params.id)
+
+    if (!note) {
+        return res.status(404).json(new ApiError(404, "Note not found"))
+    }
+
+    // remove the note
     await Note.findByIdAndDelete(req.params.id)
+
+    // remove from the user's array
+    await User.findByIdAndUpdate(
+        note.owner,
+        {
+            $pull: {
+                notes: req.params.id
+            }
+        },
+        { new: true }
+    )
 
     return res
         .status(200)
