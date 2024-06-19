@@ -4,17 +4,19 @@ import axios from "axios"
 import Modal from 'react-modal'
 import { useSelector, useDispatch } from "react-redux"
 import { getUserData, setUserData, setUserLog } from '../redux/userSlice'
-import { toast } from "react-toastify" 
+import { toast } from "react-toastify"
 
 const Navbar = () => {
 
-    const isLoggedIn = useSelector(state => state.isLoggedIn)
+    const isLoggedIn = useSelector(state => state.isLoggedIn) || false
     const user = useSelector(state => state.userData)
     const dispatch = useDispatch()
     const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
-        dispatch(getUserData())
+        if (isLoggedIn) {
+            dispatch(getUserData())
+        }
     }, [isLoggedIn])
 
     const handleLogout = async () => {
@@ -22,7 +24,7 @@ const Navbar = () => {
         dispatch(setUserLog(false))
         dispatch(setUserData(null))
     }
-    
+
 
     return (
         <>

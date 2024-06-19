@@ -18,13 +18,15 @@ const Notes = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [isNoteAdded, setIsNoteAdded] = useState(false)    // to update the page on change in notes, just toggle the state to activate the useEffect
     const [sortedBy, setSortedBy] = useState("")
-    const notes = useSelector(state => state.userNotes)
+    const notes = useSelector(state => state.userNotes) || []
     const loading = useSelector(state => state.loading)
-    const isLoggedIn = useSelector(state => state.isLoggedIn)
+    const isLoggedIn = useSelector(state => state.isLoggedIn) || false
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getUserNotes())
+        if (isLoggedIn) {
+            dispatch(getUserNotes())
+        }
     }, [isNoteAdded, isLoggedIn])
 
     if (loading) {
@@ -39,7 +41,7 @@ const Notes = () => {
             {/* Container of all divs */}
             <div className='flex items-center flex-col'>
 
-                {notes.length !== 0 ? (
+                {notes?.length !== 0 ? (
                     //  If notes available 
                     <main className="w-11/12 md:w-3/4">
 
@@ -54,7 +56,7 @@ const Notes = () => {
 
                         {/* NOTES  */}
                         <div className="notes flex flex-col items-center justify-center">
-                            {notes.map(val =>
+                            {notes?.map(val =>
                                 <SubNote key={val._id} _id={val._id}
                                     title={val.title} description={val.description} time={val.time}
                                     urgencyLevel={val.urgency} favorite={val.favorite} onNoteAdded={() => { setIsNoteAdded(!isNoteAdded) }}
