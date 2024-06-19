@@ -10,13 +10,14 @@ import SubNote from '../components/SubNote'
 import axios from "axios"
 import MyModal from '../components/ModalNote'
 import { useDispatch, useSelector } from "react-redux"
-import { getUserNotes } from '../redux/userSlice'
+import { getUserNotes, sortNotesBy } from '../redux/userSlice'
 import { Link } from 'react-router-dom'
 
 const Notes = () => {
 
     const [modalOpen, setModalOpen] = useState(false)
     const [isNoteAdded, setIsNoteAdded] = useState(false)    // to update the page on change in notes, just toggle the state to activate the useEffect
+    const [sortedBy, setSortedBy] = useState("")
     const notes = useSelector(state => state.userNotes)
     const loading = useSelector(state => state.loading)
     const isLoggedIn = useSelector(state => state.isLoggedIn)
@@ -47,8 +48,8 @@ const Notes = () => {
                             <button className='flex items-center max-sm:h-10 max-sm:w-[80px] md:p-1 md:px-3 shadow-lg hover:bg-myPink border border-black rounded-3xl' onClick={() => setModalOpen(true)}><img src={AddLogo} className='h-4 md:h-6 m-[-1px]' alt='Add button'></img>Add note</button>
 
                             <h1 className='md:text-xl font-semibold mx-3'>Sort By:</h1>
-                            <button className='flex items-center me-3 max-sm:h-10 max-sm:w-[80px] md:p-1 shadow-lg md:px-3 hover:bg-myPink border border-black rounded-3xl'><img src={UrgencyLogo} className='h-4 md:h-6 mx-1' alt='Add button'></img>Urgency</button>
-                            <button className='flex items-center max-sm:h-10 max-sm:w-[80px] md:p-1 md:px-3 shadow-lg hover:bg-myPink border border-black rounded-3xl'><img src={HeartRed} className='h-4 md:h-6 mx-1' alt='Add button'></img>Favorite</button>
+                            <button onClick={() => { dispatch(sortNotesBy("Urgency")); setSortedBy("Urgency") }} className={`flex items-center me-3 max-sm:h-10 max-sm:w-[80px] md:p-1 shadow-lg md:px-3 hover:bg-myPink border border-black rounded-3xl bg-${sortedBy === "Urgency" && "myPink"}`}><img src={UrgencyLogo} className='h-4 md:h-6 mx-1' alt='Add button'></img>Urgency</button>
+                            <button onClick={() => { dispatch(sortNotesBy("Favorite")); setSortedBy("Favorite") }} className={`flex items-center max-sm:h-10 max-sm:w-[80px] md:p-1 md:px-3 shadow-lg hover:bg-myPink border border-black rounded-3xl bg-${sortedBy === "Favorite" && "myPink"}`}><img src={HeartRed} className='h-4 md:h-6 mx-1' alt='Add button'></img>Favorite</button>
                         </div>
 
                         {/* NOTES  */}

@@ -33,6 +33,18 @@ export const userSlice = createSlice({
         },
         setUserData: (state, action) => {
             state.userData = action.payload
+        },
+        sortNotesBy: (state, action) => { 
+            const urgencyMap = {
+                "High": 1,
+                "Mid": 2,
+                "Low": 3,
+            }
+            if (action.payload === "Urgency") {
+                state.userNotes = state.userNotes.toSorted((a, b) => urgencyMap[a.urgency] - urgencyMap[b.urgency])
+            } else if (action.payload === "Favorite") {
+                state.userNotes = state.userNotes.toSorted((a, b) => b.favorite - a.favorite)
+            }
         }
     },
     extraReducers: (builder) => {
@@ -69,6 +81,6 @@ export const userSlice = createSlice({
     }
 })
 
-export const { setUserLog, setUserData } = userSlice.actions
+export const { setUserLog, setUserData, sortNotesBy } = userSlice.actions
 
 export default userSlice.reducer
