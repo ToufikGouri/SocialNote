@@ -11,7 +11,7 @@ const port = process.env.PORT || 5000
 connectDB()
     .then(() => {
         app.listen(port, () => {
-            console.log(`Server is running on port: ${port}`);
+            console.log(`Server is running on port: ${port} \nSite is live on https://socialnote.onrender.com`);
         })
     })
     .catch((error) => {
