@@ -4,7 +4,7 @@ import axios from "axios";
 export const getUserData = createAsyncThunk(
     "user/fetchUserData",
     async () => {
-        const response = await axios.get("/api/v1/users")
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users`)
         return response.data.data
     }
 )
@@ -12,7 +12,7 @@ export const getUserData = createAsyncThunk(
 export const getUserNotes = createAsyncThunk(
     "user/fetchUserNotes",
     async () => {
-        const response = await axios.get("/api/v1/notes")
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes`)
         return response.data.data
     }
 )
@@ -34,7 +34,7 @@ export const userSlice = createSlice({
         setUserData: (state, action) => {
             state.userData = action.payload
         },
-        sortNotesBy: (state, action) => { 
+        sortNotesBy: (state, action) => {
             const urgencyMap = {
                 "High": 1,
                 "Mid": 2,

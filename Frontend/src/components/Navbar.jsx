@@ -14,13 +14,11 @@ const Navbar = () => {
     const [modalOpen, setModalOpen] = useState(false)
 
     useEffect(() => {
-        if (isLoggedIn) {
-            dispatch(getUserData())
-        }
+        dispatch(getUserData())
     }, [isLoggedIn])
 
     const handleLogout = async () => {
-        await axios.post("/api/v1/users/logout").then(() => { setModalOpen(false); toast.success("Logout successfully") })
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/logout`).then(() => { setModalOpen(false); toast.success("Logout successfully") })
         dispatch(setUserLog(false))
         dispatch(setUserData(null))
     }
