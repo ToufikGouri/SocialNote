@@ -36,7 +36,7 @@ const Notes = () => {
 
     return (
         <>
-            <MyModal modalOpen={modalOpen} setModalOpen={setModalOpen} onNoteAdded={() => { setIsNoteAdded(!isNoteAdded) }} methodHandle={(data) => axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/addnote`, data)} />
+            <MyModal modalOpen={modalOpen} setModalOpen={setModalOpen} onNoteAdded={() => { setIsNoteAdded(!isNoteAdded) }} methodHandle={(data) => axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/addnote`, data, { withCredentials: true })} />
 
             {/* Container of all divs */}
             <div className='flex items-center flex-col'>

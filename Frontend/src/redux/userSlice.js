@@ -4,7 +4,7 @@ import axios from "axios";
 export const getUserData = createAsyncThunk(
     "user/fetchUserData",
     async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users`)
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users`, { withCredentials: true })
         return response.data.data
     }
 )
@@ -12,7 +12,7 @@ export const getUserData = createAsyncThunk(
 export const getUserNotes = createAsyncThunk(
     "user/fetchUserNotes",
     async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes`)
+        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes`, { withCredentials: true })
         return response.data.data
     }
 )

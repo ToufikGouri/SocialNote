@@ -32,7 +32,7 @@ const Signup = () => {
                     userData.username = newUsername
                 }
 
-                const user = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/login`, userData).then((res) => res.data.data.user)
+                const user = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/login`, userData, { withCredentials: true }).then((res) => res.data.data.user)
 
                 dispatch(setUserLog(true))
                 dispatch(setUserData(user))

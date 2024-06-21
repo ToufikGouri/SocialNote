@@ -18,7 +18,7 @@ const Navbar = () => {
     }, [isLoggedIn])
 
     const handleLogout = async () => {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/logout`).then(() => { setModalOpen(false); toast.success("Logout successfully") })
+        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/logout`, {}, { withCredentials: true }).then(() => { setModalOpen(false); toast.success("Logout successfully") })
         dispatch(setUserLog(false))
         dispatch(setUserData(null))
     }

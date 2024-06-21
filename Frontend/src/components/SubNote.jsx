@@ -27,12 +27,12 @@ const SubNote = ({ _id, title = "Title", description = "Description", time = "Da
 
     const handleLike = async (val) => {
         setLiked(val)
-        await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/updatenote`, { _id, favorite: val })
+        await axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/updatenote`, { _id, favorite: val }, { withCredentials: true })
         onNoteAdded()
     }
 
     const handleDelete = async () => {
-        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/deletenote/${_id}`).then(() => toast.success("Note deleted successfully"))
+        await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/deletenote/${_id}`, { withCredentials: true }).then(() => toast.success("Note deleted successfully"))
         setModalOpen(false)
         onNoteAdded()
     }
@@ -60,7 +60,7 @@ const SubNote = ({ _id, title = "Title", description = "Description", time = "Da
             {/* Update Modal */}
             < MyModal modalOpen={myModalOpen} setModalOpen={setMyModalOpen} onNoteAdded={onNoteAdded}
                 tl={title} desc={description} ti={formatedTime} ur={urgencyLevel} fav={liked}
-                _id={_id} successMsg='updated' methodHandle={(data) => axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/updatenote`, data)}
+                _id={_id} successMsg='updated' methodHandle={(data) => axios.patch(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/updatenote`, data, { withCredentials: true })}
             />
 
         </>
