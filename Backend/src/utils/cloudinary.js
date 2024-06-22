@@ -8,12 +8,12 @@ cloudinary.config({
 });
 
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath, folderName) => {
 
     try {
         const response = await cloudinary.uploader.upload(localFilePath, {
             resource_type: "auto",
-            folder: "Users"
+            folder: folderName
         })
 
         // remove the locally saved temporary file after the upload operation

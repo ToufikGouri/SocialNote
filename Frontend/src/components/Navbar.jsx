@@ -3,7 +3,7 @@ import { Link } from "react-router-dom"
 import axios from "axios"
 import Modal from 'react-modal'
 import { useSelector, useDispatch } from "react-redux"
-import { getUserData, setUserData, setUserLog } from '../redux/userSlice'
+import { getUserData, setUserData, setUserLog, sortNotesBy } from '../redux/userSlice'
 import { toast } from "react-toastify"
 
 const Navbar = () => {
@@ -20,6 +20,7 @@ const Navbar = () => {
     const handleLogout = async () => {
         await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/logout`, {}, { withCredentials: true }).then(() => { setModalOpen(false); toast.success("Logout successfully") })
         dispatch(setUserLog(false))
+        dispatch(sortNotesBy("Clear"))
         dispatch(setUserData(null))
     }
 

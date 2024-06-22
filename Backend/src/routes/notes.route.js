@@ -4,13 +4,15 @@ import { addNoteController, deleteNoteController, getNotesController, updateNote
 
 const router = Router()
 
-router.route("/").get(verifyJWT, getNotesController)
+router.use(verifyJWT)   // Apply verifyJWT middleware to all routes defined after this point
 
-router.route("/addnote").post(verifyJWT, addNoteController)
+router.route("/").get(getNotesController)
 
-router.route("/updatenote").patch(verifyJWT, updateNoteController)
+router.route("/addnote").post(addNoteController)
 
-router.route("/deletenote/:id").delete(verifyJWT, deleteNoteController)
+router.route("/updatenote").patch(updateNoteController)
+
+router.route("/deletenote/:id").delete(deleteNoteController)
 
 export default router
 

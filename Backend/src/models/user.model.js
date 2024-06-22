@@ -32,6 +32,12 @@ const userSchema = new mongoose.Schema({
             ref: "Note"
         }
     ],
+    posts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Post"
+        }
+    ],
     refreshToken: {
         type: String
     }

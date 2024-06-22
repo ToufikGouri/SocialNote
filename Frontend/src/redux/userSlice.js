@@ -44,6 +44,8 @@ export const userSlice = createSlice({
                 state.userNotes = state.userNotes.toSorted((a, b) => urgencyMap[a.urgency] - urgencyMap[b.urgency])
             } else if (action.payload === "Favorite") {
                 state.userNotes = state.userNotes.toSorted((a, b) => b.favorite - a.favorite)
+            } else if(action.payload === "Clear"){
+                state.userNotes = []
             }
         }
     },

@@ -16,13 +16,22 @@ app.use(express.static("public"))                                   // configure
 
 app.use(cookieparser())     // cookieparser config to manage the cookies
 
+// route for health check
+app.get("/api/v1/", (req, res) => {
+    res.status(200).json({
+        status: "success",
+        message: "Everything is fine",  
+    })
+})
 
 // routes import
 import userRouter from "./routes/user.route.js"
 import notesRouter from "./routes/notes.route.js"
+import feedRouter from "./routes/posts.route.js"
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/notes", notesRouter)
+app.use("/api/v1/feed", feedRouter)
 
 export default app

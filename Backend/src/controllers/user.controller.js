@@ -42,7 +42,7 @@ const registerController = asyncHandler(async (req, res) => {
     const avatarLocalPath = req.file?.path
     let avatarURL;
     if (avatarLocalPath) {
-        avatarURL = await uploadOnCloudinary(avatarLocalPath)
+        avatarURL = await uploadOnCloudinary(avatarLocalPath, "Users")
     }
 
     // creating user
@@ -54,7 +54,7 @@ const registerController = asyncHandler(async (req, res) => {
     const createdUser = await User.findById(user._id).select("-password")
 
     if (!createdUser) {
-        throw new ApiError(500, "Something went wrong while registering the user")
+        return res.status(500).json(new ApiError(500, "Something went wrong while registering the user"))
     }
 
     // if reached till here means user created successfully
@@ -100,7 +100,7 @@ const loginController = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite:'None',
+        sameSite: 'None',
         maxAge: 30 * 60 * 60 * 24 * 1000
     }
 
@@ -132,7 +132,7 @@ const logoutController = asyncHandler(async (req, res) => {
     const options = {
         httpOnly: true,
         secure: true,
-        sameSite:'None',
+        sameSite: 'None',
     }
 
     return res.status(200)
