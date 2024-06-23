@@ -38,6 +38,26 @@ const userSchema = new mongoose.Schema({
             ref: "Post"
         }
     ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User"
+        }
+    ],
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    totolPosts: {
+        type: Number,
+        default: 0
+    },
     refreshToken: {
         type: String
     }

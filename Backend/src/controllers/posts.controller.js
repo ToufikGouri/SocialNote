@@ -141,6 +141,12 @@ const deletePostController = asyncHandler(async (req, res) => {
 
 })
 
+// on like we'll get the like value as true or false
+// True: push the user id in likes array
+// False: pull the user id from the likes array
+
+// on post load if user id alredy exist in likes array then in response add on the post as liked=true else false
+
 export {
     getAllPostsController,
     getUserPostsController,

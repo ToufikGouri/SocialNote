@@ -18,10 +18,23 @@ const Notes = () => {
     const [modalOpen, setModalOpen] = useState(false)
     const [isNoteAdded, setIsNoteAdded] = useState(false)    // to update the page on change in notes, just toggle the state to activate the useEffect
     const [sortedBy, setSortedBy] = useState("")
-    const notes = useSelector(state => state.userNotes) || []
-    const loading = useSelector(state => state.loading)
-    const isLoggedIn = useSelector(state => state.isLoggedIn) || false
+    const notes = useSelector(state => state.user.userNotes) || []
+    const loading = useSelector(state => state.user.loading)
+    const isLoggedIn = useSelector(state => state.user.isLoggedIn) || false
     const dispatch = useDispatch()
+
+    const handleSort = (val) => {
+        if (sortedBy !== "") {
+            dispatch(sortNotesBy("None"))
+            setSortedBy("")
+        } else if (val === "Urgency") {
+            dispatch(sortNotesBy("Urgency"));
+            setSortedBy("Urgency")
+        } else if (val === "Favorite") {
+            dispatch(sortNotesBy("Favorite"));
+            setSortedBy("Favorite")
+        }
+    }
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -50,8 +63,8 @@ const Notes = () => {
                             <button className='flex items-center max-sm:h-10 max-sm:w-[80px] md:p-1 md:px-3 shadow-lg hover:bg-myPink border border-black rounded-3xl' onClick={() => setModalOpen(true)}><img src={AddLogo} className='h-4 md:h-6 m-[-1px]' alt='Add button'></img>Add note</button>
 
                             <h1 className='md:text-xl font-semibold mx-3'>Sort By:</h1>
-                            <button onClick={() => { dispatch(sortNotesBy("Urgency")); setSortedBy("Urgency") }} className={`flex items-center me-3 max-sm:h-10 max-sm:w-[80px] md:p-1 shadow-lg md:px-3 hover:bg-myPink border border-black rounded-3xl bg-${sortedBy === "Urgency" && "myPink"}`}><img src={UrgencyLogo} className='h-4 md:h-6 mx-1' alt='Add button'></img>Urgency</button>
-                            <button onClick={() => { dispatch(sortNotesBy("Favorite")); setSortedBy("Favorite") }} className={`flex items-center max-sm:h-10 max-sm:w-[80px] md:p-1 md:px-3 shadow-lg hover:bg-myPink border border-black rounded-3xl bg-${sortedBy === "Favorite" && "myPink"}`}><img src={HeartRed} className='h-4 md:h-6 mx-1' alt='Add button'></img>Favorite</button>
+                            <button onClick={() => handleSort("Urgency")} className={`flex items-center me-3 max-sm:h-10 max-sm:w-[80px] md:p-1 shadow-lg md:px-3 hover:bg-myPink border border-black rounded-3xl ${sortedBy === "Urgency" ? "bg-myPink" : ""}`}><img src={UrgencyLogo} className='h-4 md:h-6 mx-1' alt='Add button'></img>Urgency</button>
+                            <button onClick={() => handleSort("Favorite")} className={`flex items-center max-sm:h-10 max-sm:w-[80px] md:p-1 md:px-3 shadow-lg hover:bg-myPink border border-black rounded-3xl ${sortedBy === "Favorite" ? "bg-myPink" : ""}`}><img src={HeartRed} className='h-4 md:h-6 mx-1' alt='Add button'></img>Favorite</button>
                         </div>
 
                         {/* NOTES  */}

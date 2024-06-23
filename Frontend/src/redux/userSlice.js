@@ -20,6 +20,7 @@ export const getUserNotes = createAsyncThunk(
 const initialState = {
     userData: null,
     userNotes: [],
+    defaultNotes: [],
     isLoggedIn: false,
     loading: false
 }
@@ -44,7 +45,9 @@ export const userSlice = createSlice({
                 state.userNotes = state.userNotes.toSorted((a, b) => urgencyMap[a.urgency] - urgencyMap[b.urgency])
             } else if (action.payload === "Favorite") {
                 state.userNotes = state.userNotes.toSorted((a, b) => b.favorite - a.favorite)
-            } else if(action.payload === "Clear"){
+            } else if (action.payload === "None") {
+                state.userNotes = state.defaultNotes
+            } else if (action.payload === "Clear") {
                 state.userNotes = []
             }
         }
@@ -68,15 +71,16 @@ export const userSlice = createSlice({
         // userNotes cases
         builder
             .addCase(getUserNotes.pending, (state) => {
-                state.loading = true
+                // state.loading = true
             })
             .addCase(getUserNotes.fulfilled, (state, action) => {
                 state.userNotes = action.payload
-                state.loading = false
+                state.defaultNotes = action.payload
+                // state.loading = false
             })
             .addCase(getUserNotes.rejected, (state) => {
                 state.userNotes = []
-                state.loading = false
+                // state.loading = false
             })
 
 

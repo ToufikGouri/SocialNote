@@ -8,8 +8,8 @@ import { toast } from "react-toastify"
 
 const Navbar = () => {
 
-    const isLoggedIn = useSelector(state => state.isLoggedIn) || false
-    const user = useSelector(state => state.userData)
+    const isLoggedIn = useSelector(state => state.user.isLoggedIn) || false
+    const user = useSelector(state => state.user.userData)
     const dispatch = useDispatch()
     const [modalOpen, setModalOpen] = useState(false)
 
