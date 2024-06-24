@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import getPostsWithUserInteractions from "../utils/getPostsWithUserInteractions.js"
 
 const getAllPostsController = asyncHandler(async (req, res) => {
 
@@ -25,7 +26,7 @@ const getAllPostsController = asyncHandler(async (req, res) => {
     //     }
     // });
 
-    const posts = await Post.find()
+    const posts = await getPostsWithUserInteractions(req.user._id)
 
     if (!posts) {
         return res.status(500).json(new ApiError(500, "Error loading posts"))
@@ -38,15 +39,15 @@ const getAllPostsController = asyncHandler(async (req, res) => {
 
 const getUserPostsController = asyncHandler(async (req, res) => {
 
-    const user = await User.findById(req.user?._id).populate("posts")
+    const posts = await getPostsWithUserInteractions(req.user._id, { "owner._id": req.user._id })
 
-    if (!user) {
-        return res.status(400).json(new ApiError(400, "User not found"))
+    if (!posts) {
+        return res.status(500).json(new ApiError(500, "Error loading posts"))
     }
 
     return res
         .status(200)
-        .json(new ApiResponse(200, user.posts, "Posts fetched successfully"))
+        .json(new ApiResponse(200, posts, "Posts fetched successfully"))
 })
 
 const addPostController = asyncHandler(async (req, res) => {
@@ -140,12 +141,6 @@ const deletePostController = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, {}, "Post deleted successfully"))
 
 })
-
-// on like we'll get the like value as true or false
-// True: push the user id in likes array
-// False: pull the user id from the likes array
-
-// on post load if user id alredy exist in likes array then in response add on the post as liked=true else false
 
 export {
     getAllPostsController,
