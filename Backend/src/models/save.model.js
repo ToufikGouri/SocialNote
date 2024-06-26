@@ -1,12 +1,12 @@
 import mongoose from "mongoose";
 
-const likeSchema = new mongoose.Schema({
-    owner: {    // who liked
+const saveSchema = new mongoose.Schema({
+    owner: {    // who saved
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
-    post: {     // the post user liked
+    post: {     // the post user saved
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post",
         required: true
@@ -14,4 +14,4 @@ const likeSchema = new mongoose.Schema({
 
 }, { timestamps: true })
 
-export const Like = mongoose.model("Like", likeSchema)
+export const Save = mongoose.model("Save", saveSchema)

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllPosts, getUserAllPosts } from '../redux/feedSlice'
 import Post from '../components/Post'
+import { ToastContainer } from 'react-toastify'
 
 const Feed = () => {
 
@@ -88,7 +89,7 @@ const Feed = () => {
     ]
 
 
-    // console.log("All posts", allPosts);
+    console.log("All posts", allPosts);
     // getting All posts data till this point just using custom data because of overview in development in mobile(can't login backend localhost issue)
 
     return (
@@ -96,11 +97,14 @@ const Feed = () => {
             {/* <h1>This is feed</h1> */}
 
             <div className="flex flex-col items-center">
-                {data.map(val =>
+                {allPosts.map(val =>
                     <Post key={val._id} _id={val._id} owner={val.owner} image={val.image}
-                    caption={val.caption} totalLikes={val.totalLikes} totalComments={val.totalComments} uploadTime={val.createdAt} />
+                        caption={val.caption} totalLikes={val.totalLikes} totalComments={val.totalComments} uploadTime={val.createdAt}
+                        isLiked={val.isLiked} isCommented={val.isCommented} isSaved={val.isSaved} />
                 )}
             </div>
+
+            <ToastContainer limit={3} />
         </>
     )
 }

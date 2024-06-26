@@ -71,7 +71,7 @@ const MyModal = ({ modalOpen, setModalOpen, onNoteAdded, methodHandle, _id, succ
 
                     <div className='my-3'>
                         <label htmlFor="disc" className='font-semibold block'>Description</label>
-                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="disc" className='rounded-md p-2 w-[270px] border border-black' id="disc" cols="30" rows="10" placeholder='Description...'></textarea>
+                        <textarea value={description} onChange={(e) => setDescription(e.target.value)} name="disc" className='rounded-md p-2 w-[270px] resize-none border border-black' id="disc" cols="30" rows="10" placeholder='Description...'></textarea>
                     </div>
 
                     <div className='my-3'>

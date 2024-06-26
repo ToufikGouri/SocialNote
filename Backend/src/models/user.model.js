@@ -32,10 +32,16 @@ const userSchema = new mongoose.Schema({
             ref: "Note"
         }
     ],
-    posts: [
+    posts: [        // to get total posts just get the length of posts
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Post"
+        }
+    ],
+    savedPosts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Save"
         }
     ],
     following: [
@@ -53,10 +59,6 @@ const userSchema = new mongoose.Schema({
     isVerified: {
         type: Boolean,
         default: false
-    },
-    totolPosts: {
-        type: Number,
-        default: 0
     },
     refreshToken: {
         type: String

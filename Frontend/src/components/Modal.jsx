@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const Modal = ({ isOpen, deleteOrNot, onClose, children }) => {
+const Modal = ({ isOpen, deleteOrNot, onClose, children, okBtn = "Ok" }) => {
     useEffect(() => {
         const handleOutsideClick = (e) => {
             if (e.target.classList.contains('modal-overlay')) onClose();
@@ -23,7 +23,7 @@ const Modal = ({ isOpen, deleteOrNot, onClose, children }) => {
                         Close
                     </button>
                     <button className="bg-red-500 border-2 mb-3 mx-3 self-end text-white px-4 py-2 rounded-lg hover:bg-red-300 hover:text-hoverBlue hover:border-hoverBlue" onClick={deleteOrNot}>
-                        Ok
+                        {okBtn}
                     </button>
                 </div>
             </div>

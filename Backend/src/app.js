@@ -20,7 +20,7 @@ app.use(cookieparser())     // cookieparser config to manage the cookies
 app.get("/api/v1/", (req, res) => {
     res.status(200).json({
         status: "success",
-        message: "Everything is fine",  
+        message: "Everything is fine",
     })
 })
 
@@ -28,10 +28,12 @@ app.get("/api/v1/", (req, res) => {
 import userRouter from "./routes/user.route.js"
 import notesRouter from "./routes/notes.route.js"
 import feedRouter from "./routes/posts.route.js"
+import interactionRouter from "./routes/interaction.route.js"
 
 // routes declaration
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/notes", notesRouter)
 app.use("/api/v1/feed", feedRouter)
+app.use("/api/v1/interaction", interactionRouter)
 
 export default app
