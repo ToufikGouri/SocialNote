@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import LikeLogo from "../assets/Posts Assets/Like.svg"
-import UnLikeLogo from "../assets/Posts Assets/Unlike.svg"
-import CommentLogo from "../assets/Posts Assets/Comment.svg"
-import SaveLogo from "../assets/Posts Assets/Save.svg"
-import UnSaveLogo from "../assets/Posts Assets/UnSave.svg"
-import VerifiedLogo from "../assets/Posts Assets/Verified.svg"
-import ThreeDotsLogo from "../assets/Posts Assets/ThreeDots.svg"
+import LikeLogo from "../assets/Posts Assets/Like.png"
+import UnLikeLogo from "../assets/Posts Assets/Unlike.png"
+import CommentLogo from "../assets/Posts Assets/Comment.png"
+import SaveLogo from "../assets/Posts Assets/Save.png"
+import UnSaveLogo from "../assets/Posts Assets/UnSave.png"
+import VerifiedLogo from "../assets/Posts Assets/Verified.png"
+import ThreeDotsLogo from "../assets/Posts Assets/ThreeDots.png"
 import DeleteLogo from "../assets/Notes Assets/Cancel.png"
 import Modal from "react-modal"
 import ModalComment from './Modal'

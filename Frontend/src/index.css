@@ -41,6 +41,12 @@
     }
 }
 
+.bgImgProps {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .boxEffect {
     animation: appear linear;
     animation-timeline: view();

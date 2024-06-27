@@ -4,6 +4,7 @@ import Home from "./pages/Home"
 import Notes from "./pages/Notes"
 import Signup from "./pages/Signup"
 import Signin from "./pages/Signin"
+import Sidebar from "./components/Sidebar"
 
 function App() {
 
@@ -11,6 +12,7 @@ function App() {
     <>
       <Router>
         <Navbar />
+        <Sidebar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/notes" element={<Notes />} />
