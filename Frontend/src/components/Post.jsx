@@ -70,13 +70,6 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
     const [commentsCount, setCommentsCount] = useState(totalComments)
     const [currentCmntId, setCurrentCmntId] = useState(null)
 
-    const bgImageStyleForBtn = (url) => ({
-        backgroundImage: `url(${url})`,
-        backgroundSize: 'contain',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center',
-    });
-
     const handleLikeOrSave = async (action, val) => {
         if (action === "like") {
             try {
@@ -138,18 +131,15 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
     const handleDeleteComment = async () => {
         try {
             await axios.delete(`${import.meta.env.VITE_BACKEND_URL}/api/v1/interaction/deletecomment/${currentCmntId}`, { withCredentials: true })
-            loadComments()
-            setCommentsCount(commentsCount - 1)
             setModalDeleteComment(false)
+            setCommentsCount(commentsCount - 1)
+            loadComments()
 
         } catch (error) {
             console.log("Axios error", error);       // remove this after
             toast.error("Failed to delete comment")
         }
     }
-
-    console.log("postComments", postComments);
-
 
     return (
         <>
@@ -166,10 +156,10 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
                 {/* Like,Comment & Share buttons*/}
                 <div className='flex justify-between m-2 sm:mx-0'>
                     <div className='flex'>
-                        <button onClick={() => handleLikeOrSave("like", !postLiked)} className='cursor-pointer invertHalf h-7 w-7' style={bgImageStyleForBtn(postLiked ? LikeLogo : UnLikeLogo)}></button>
-                        <button onClick={() => { setModalOpen(true); loadComments() }} className='cursor-pointer invertHalf h-7 w-7 mx-3' style={bgImageStyleForBtn(CommentLogo)}></button>
+                        <button onClick={() => handleLikeOrSave("like", !postLiked)} className='cursor-pointer invertHalf h-7 w-7 bgImgProps' style={{ backgroundImage: `url(${postLiked ? LikeLogo : UnLikeLogo})` }}></button>
+                        <button onClick={() => { setModalOpen(true); loadComments() }} className='cursor-pointer invertHalf h-7 w-7 bgImgProps mx-3' style={{ backgroundImage: `url(${CommentLogo})` }}></button>
                     </div>
-                    <button onClick={() => handleLikeOrSave("save", !postSaved)} className='cursor-pointer invertHalf h-7 w-7' style={bgImageStyleForBtn(postSaved ? SaveLogo : UnSaveLogo)}></button>
+                    <button onClick={() => handleLikeOrSave("save", !postSaved)} className='cursor-pointer invertHalf h-7 w-7 bgImgProps' style={{ backgroundImage: `url(${postSaved ? SaveLogo : UnSaveLogo})` }}></button>
                 </div >
 
                 {/* Post details */}
@@ -211,19 +201,15 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
                     <div className='w-full min-h-60'>
                         {postComments.length > 0 ? (
                             postComments.map(val =>
-                                <div key={val._id} className='flex py-2 p-3' >
+                                <div key={val._id} className='flex group relative py-2 p-3' >
                                     <div className='me-2'>
                                         <div className='cursor-pointer h-8 w-8 bg-cover bg-no-repeat bg-center rounded-full border border-black' style={{ backgroundImage: `url(${val.owner.avatar})` }}></div>
                                     </div>
                                     <div>
-                                        <div className="font-semibold">{val.owner.username}
-                                            <div className='ms-2 inline-flex flex-col group'>
-                                                <span className='font-normal'>{val.content}</span>
-                                                {/* Delete comment */}
-                                                <button onClick={() => { setCurrentCmntId(val._id); setModalDeleteComment(true) }} className={`${user._id === val.owner._id ? "group-hover:visible" : ""} invisible cursor-pointer invertHalf h-4 w-4 rotate-90`} style={bgImageStyleForBtn(ThreeDotsLogo)}></button>
-                                            </div>
-                                        </div>
+                                        <div className="font-semibold">{val.owner.username}&nbsp;<span className='font-normal'>{val.content}</span></div>
                                     </div>
+                                    {/* Delete comment */}
+                                    <button onClick={() => { setCurrentCmntId(val._id); setModalDeleteComment(true) }} className={`${user._id === val.owner._id ? "group-hover:visible" : ""} absolute right-0 top-4 invisible cursor-pointer invertHalf h-4 w-4 bgImgProps`} style={{ backgroundImage: `url(${ThreeDotsLogo})` }}></button>
                                 </div>
                             )
                         ) : (
