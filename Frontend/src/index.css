@@ -57,4 +57,12 @@
     .invertHalf:hover {
         filter: invert(0.5);
     }
+
+    .smoothHover {
+        transition: all 150ms ease-in-out;
+    }
+
+    .smoothHover:hover {
+        scale: 1.1;
+    }
 }
