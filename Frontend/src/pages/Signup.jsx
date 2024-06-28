@@ -9,7 +9,7 @@ const Signup = () => {
 
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
-    const [avatar, setAvatar] = useState((""))
+    const [avatar, setAvatar] = useState("")
     const [pass, setPass] = useState("")
     const [confPass, setConfPass] = useState("")
     const avatarRef = useRef(null)
