@@ -4,16 +4,16 @@ import axios from "axios";
 export const getAllPosts = createAsyncThunk(
     "feed/fetchAllPosts",
     async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/feed`, { withCredentials: true })
-        return response.data.data
+        return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/feed`, { withCredentials: true })
+            .then(res => res.data.data.reverse())
     }
 )
 
 export const getUserAllPosts = createAsyncThunk(
     "feed/fetchUserAllPosts",
     async () => {
-        const response = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/feed/userposts`, { withCredentials: true })
-        return response.data.data
+        return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/feed/userposts`, { withCredentials: true })
+            .then(res => res.data.data.reverse())
     }
 )
 
@@ -52,7 +52,7 @@ export const feedSlice = createSlice({
             .addCase(getUserAllPosts.rejected, (state) => {
                 state.loading = false
             })
-            
+
     }
 })
 

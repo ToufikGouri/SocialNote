@@ -151,7 +151,9 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
                     <p className='font-semibold'>{owner.username}</p>
                     {/* <p className='font-semibold'>{uploadTime}</p> */}
                 </div>
-                <img className='w-96 sm:w-full' src={image} alt="Post" />
+                <div className='min-h-52 flex'>
+                    <img className='w-96 self-center sm:w-full' src={image} alt="Post" />
+                </div>
 
                 {/* Like,Comment & Share buttons*/}
                 <div className='flex justify-between m-2 sm:mx-0'>
