@@ -32,6 +32,10 @@ const postSchema = new mongoose.Schema({
             type: String,
             required: true,
         },
+        isVerified: {
+            type: Boolean,
+            required: true
+        }
     },
 
     // to get the like/comment by which user 

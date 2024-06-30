@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import axios from "axios"
 import { useDispatch } from 'react-redux';
@@ -14,6 +14,7 @@ const Signup = () => {
     const [confPass, setConfPass] = useState("")
     const avatarRef = useRef(null)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleCreate = async () => {
 
@@ -52,20 +53,22 @@ const Signup = () => {
 
                 dispatch(setUserLog(true))
                 dispatch(setUserData(user))
+                navigate("/")
+
+                // set all fields blank
+                setUsername("")
+                setEmail("")
+                setPass("")
+                setConfPass("")
+                if (avatarRef.current) {
+                    avatarRef.current.value = null
+                }
                 toast.success("Account created successfully")
             } catch (error) {
                 console.log("Axios error", error);       // remove this after
                 toast.error(error.response?.data?.message || "An error occurred")
             }
 
-            // set all fields blank after successfull
-            setUsername("")
-            setEmail("")
-            setPass("")
-            setConfPass("")
-            if (avatarRef.current) {
-                avatarRef.current.value = null
-            }
         }// if block ends here
 
     }

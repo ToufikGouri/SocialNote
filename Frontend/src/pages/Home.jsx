@@ -6,24 +6,29 @@ import LoadingLogo from "../assets/Loading.svg"
 
 const Home = () => {
 
-    const isLoggedIn = useSelector(state => state.user.isLoggedIn)
+    const isLoggedIn = useSelector(state => state.user.isLoggedIn) || false
     const loading = useSelector(state => state.user.loading)
 
+    if(isLoggedIn){
+        document.title = "Feed | SocialNotes"
+    }else{
+        document.title = "SocialNotes"
+    }
 
     if (loading) {
         return <div className='h-[90vh] flex justify-center items-center' ><img className='h-32' src={LoadingLogo} alt="Loading..." /></div>
     }
-
+ 
     return (
         <>
-            {/* {
+            {
                 !isLoggedIn ? (
                     <LandingPage />
                 ) : (
                     <Feed />
-                    )
-                    } */}
-            <Feed />
+                )
+            }
+            {/* <Feed /> */}
         </>
     )
 }

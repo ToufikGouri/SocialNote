@@ -31,6 +31,29 @@ const Modal = ({ isOpen, deleteOrNot, onClose, children, okBtn = "Ok" }) => {
     );
 };
 
+export const ModalBody = ({ isOpen, onClose, children }) => {
+    useEffect(() => {
+        const handleOutsideClick = (e) => {
+            if (e.target.classList.contains('modal-overlay')) onClose();
+        };
+
+        if (isOpen) document.addEventListener('click', handleOutsideClick);
+        return () => {
+            document.removeEventListener('click', handleOutsideClick);
+        };
+    }, [isOpen, onClose]);
+
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed text-black top-0 left-0 z-50 w-full h-full flex items-center justify-center bg-black bg-opacity-50 modal-overlay">
+            <div className="bg-white flex flex-col text-start rounded-lg shadow-md overflow-hidden mx-4 w-full max-w-md">
+                <div className="p-6">{children}</div> {/* Props text content */}
+            </div>
+        </div>
+    );
+};
+
 export default Modal;
 
 // One BUTTON:

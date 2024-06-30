@@ -96,11 +96,11 @@ const Feed = () => {
         <>
             {/* <h1>This is feed</h1> */}
 
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center py-12 sm:py-6">
                 {allPosts.map(val =>
                     <Post key={val._id} _id={val._id} owner={val.owner} image={val.image}
                         caption={val.caption} totalLikes={val.totalLikes} totalComments={val.totalComments} uploadTime={val.createdAt}
-                        isLiked={val.isLiked} isCommented={val.isCommented} isSaved={val.isSaved} />
+                        isLiked={val.isLiked} isCommented={val.isCommented} isSaved={val.isSaved} isVerified={val.isVerified} />
                 )}
             </div>
 

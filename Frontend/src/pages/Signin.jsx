@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { ToastContainer, toast } from 'react-toastify';
 import { setUserData, setUserLog } from '../redux/userSlice';
 
@@ -10,6 +10,7 @@ const Signup = () => {
     const [username, setUsername] = useState("")
     const [pass, setPass] = useState("")
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const handleLogin = async () => {
 
@@ -36,15 +37,16 @@ const Signup = () => {
 
                 dispatch(setUserLog(true))
                 dispatch(setUserData(user))
+                navigate("/")
+
+                // set all fields blank 
+                setUsername("")
+                setPass("")
                 toast.success(`Welcome back ${user.username}`)
             } catch (error) {
                 console.log("Axios error", error);       // remove this after
                 toast.error(error.response?.data?.message || "An error occurred")
             }
-
-            // set all fields blank after successfull
-            setUsername("")
-            setPass("")
 
         }// if block ends here
 

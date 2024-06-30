@@ -51,17 +51,31 @@ const registerController = asyncHandler(async (req, res) => {
     })
 
     // checking if user created successfully and removing some fields
-    const createdUser = await User.findById(user._id).select("-password")
+    const createdUser = await User.findById(user._id).select("-password -refreshToken")
 
     if (!createdUser) {
         return res.status(500).json(new ApiError(500, "Something went wrong while registering the user"))
     }
 
     // if reached till here means user created successfully
-    return res.status(200).json(
-        new ApiResponse(200, createdUser, "User registered successfully")
-    )
+    // generating the tokens
+    const { accessToken, refreshToken } = await generateAccessAndRefreshToken(createdUser._id)
 
+    // options for cookie-parser
+    const options = {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
+        maxAge: 30 * 60 * 60 * 24 * 1000
+    }
+
+    return res.status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200,
+            { user: createdUser, accessToken, refreshToken },
+            "User registered successfully")
+        )
 })
 
 const loginController = asyncHandler(async (req, res) => {

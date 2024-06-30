@@ -67,6 +67,26 @@ const likeController = asyncHandler(async (req, res) => {
     }
 })
 
+const getLikeController = asyncHandler(async (req, res) => {
+
+    const data = await Post.findById(req.params.id)
+        .populate({
+            path: "likes",
+            populate: {
+                path: "owner",
+                select: "username avatar isVerified"
+            }
+        }).select("likes")
+
+    if (!data) {
+        return res.status(500).json(new ApiError(500, "Can't load likes"))
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, data, "Likes fetched successfully"))
+})
+
 const getCommentController = asyncHandler(async (req, res) => {
 
     const data = await Post.findById(req.params.id)
@@ -74,7 +94,7 @@ const getCommentController = asyncHandler(async (req, res) => {
             path: "comments",
             populate: {
                 path: "owner",
-                select: "username avatar"
+                select: "username avatar isVerified"
             }
         }).select("comments")
 
@@ -203,4 +223,4 @@ const saveController = asyncHandler(async (req, res) => {
     }
 })
 
-export { likeController, getCommentController, addCommentController, deleteCommentController, saveController }
+export { likeController, getLikeController, getCommentController, addCommentController, deleteCommentController, saveController }

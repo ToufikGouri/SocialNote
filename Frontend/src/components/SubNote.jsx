@@ -40,7 +40,7 @@ const SubNote = ({ _id, title = "Title", description = "Description", time = "Da
 
     return (
         <>
-            <div onClick={() => setMyModalOpen(true)} className={`noteBody my-2 drop-shadow-lg cursor-pointer hover:shadow-xl relative inline-block rounded-xl bg-${noteColor} min-h-32 w-72 md:w-3/6 p-4`}>
+            <div onClick={() => setMyModalOpen(true)} className={`noteBody break-words my-2 drop-shadow-lg cursor-pointer hover:shadow-xl relative inline-block rounded-xl bg-${noteColor} min-h-32 w-72 md:w-3/6 p-4`}>
                 <p className='absolute right-3 top-0 italic'>{time}</p>
 
                 <h1 className='font-bold'>{title}</h1>

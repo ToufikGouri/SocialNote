@@ -60,7 +60,7 @@ const MyModal = ({ modalOpen, setModalOpen, onNoteAdded, methodHandle, _id, succ
             onRequestClose={() => setModalOpen(false)}
             contentLabel="Custom Modal"
             className="w-4/5 sm:w-1/2 lg:w-1/3 rounded-xl outline-none bg-white"
-            overlayClassName="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+            overlayClassName="fixed z-50 inset-0 flex items-center justify-center bg-black bg-opacity-50"
         >
             <div className='flex flex-col items-center relative'>
                 <div>

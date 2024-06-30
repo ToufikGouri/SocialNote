@@ -53,8 +53,8 @@ const getUserPostsController = asyncHandler(async (req, res) => {
 const addPostController = asyncHandler(async (req, res) => {
 
     const { caption } = req.body
-    const { _id, username, avatar } = req.user
-    const imageLocalPath = req.file?.path
+    const { _id, username, avatar, isVerified } = req.user
+    const imageLocalPath = req.file?.path 
 
     if (!caption || !imageLocalPath) {
         return res.status(401).json(new ApiError(401, "Caption or Image is missing"))
@@ -71,7 +71,7 @@ const addPostController = asyncHandler(async (req, res) => {
     const createdPost = await Post.create({
         caption,
         image,
-        owner: { _id, username, avatar }
+        owner: { _id, username, avatar, isVerified }
     })
 
     if (!createdPost) {
@@ -96,10 +96,7 @@ const addPostController = asyncHandler(async (req, res) => {
 })
 
 const updatePostController = asyncHandler(async (req, res) => {
-
-    // get the required fields from the req.body
-    // update them
-
+ 
     const { caption, _id } = req.body
 
     const post = await Post.findByIdAndUpdate(_id, {

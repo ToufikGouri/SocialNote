@@ -7,18 +7,18 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-const ModalPost = ({ modalOpen, setModalOpen }) => {
+const ModalPost = ({ modalOpen, setModalOpen, updatedImage = null, updatedCaption = "", disableImageUpload = false, handleEditPost }) => {
 
-    const [caption, setCaption] = useState("")
-    const [postImage, setPostImage] = useState(null)
-    const [previewImage, setPreviewImage] = useState(null)
+    const [caption, setCaption] = useState(updatedCaption)
+    const [postImage, setPostImage] = useState(updatedImage)
+    const [previewImage, setPreviewImage] = useState(updatedImage)
     const [refreshPosts, setRefreshPosts] = useState(false)
     const imageRef = useRef(null)
     const user = useSelector(state => state.user.userData)
 
     useEffect(() => {
 
-        if (postImage) {
+        if (postImage && (typeof postImage !== "string")) {
             // Create an object URL for the selected file
             const objectURL = URL.createObjectURL(postImage)
             setPreviewImage(objectURL)
@@ -91,7 +91,7 @@ const ModalPost = ({ modalOpen, setModalOpen }) => {
                 <div className={`h-72 sm:h-96 flex max-sm:flex-col max-sm:items-center justify-between relative ${postImage ? "block" : "hidden"}`}>
 
                     <div className='w-full sm:w-2/4 h-full flex items-center justify-center max-sm:border-b-2 sm:border-r-2'>
-                        <img className='w-11/12 h-full object-contain' src={previewImage} alt="Post image" style={{ aspectRatio: "1s6:9" }} />
+                        <img className='w-11/12 h-full object-contain' src={previewImage} alt="Post image" />
                         {/* <div className='h-full w-80 bg-no-repeat bg-contain bg-center border-r border-black' style={{ backgroundImage: `url(${postImage && URL.createObjectURL(postImage)})` }}></div> */}
                     </div>
 
@@ -104,8 +104,8 @@ const ModalPost = ({ modalOpen, setModalOpen }) => {
 
                         {/* Upload or remove image buttons */}
                         <div className='flex justify-around my-4'>
-                            <button onClick={() => setPostImage(null)} className='cursor-pointer duration-150 text-red-500 hover:text-red-100'>Change image</button>
-                            <button onClick={handleAddPost} className='cursor-pointer duration-150 text-blue-500 hover:text-blue-100'>Upload</button>
+                            <button onClick={() => setPostImage(null)} className={`cursor-pointer duration-150 text-red-500 hover:text-red-100 ${disableImageUpload ? "hidden" : ""}`}>Change image</button>
+                            <button onClick={() => { disableImageUpload ? handleEditPost("edit", caption) : handleAddPost() }} className='cursor-pointer duration-150 text-blue-500 hover:text-blue-100'>Upload</button>
                         </div>
 
                     </div>
