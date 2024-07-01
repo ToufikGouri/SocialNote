@@ -170,5 +170,99 @@ const getUserController = asyncHandler(async (req, res) => {
 
 })
 
+const followController = asyncHandler(async (req, res) => {
 
-export { registerController, loginController, logoutController, getUserController }
+    // followTo -> target profile, currentUser -> user profile, isFollow -> Boolean
+
+    const { isFollow, followTo } = req.body
+    const currentUser = req.user._id
+
+    const existingFollow = await User.findOne({ _id: currentUser, following: followTo })
+
+    if (isFollow) {
+        // user wants to follow
+
+        if (existingFollow) {
+            return res.status(400).json(new ApiError(400, "Profile already following"))
+        }
+
+        // updating current user's following list
+        await User.findByIdAndUpdate(currentUser, { $push: { following: followTo } })
+
+        // updating targeted user's followers list
+        await User.findByIdAndUpdate(followTo, { $push: { followers: currentUser } })
+
+        return res.status(200)
+            .json(new ApiResponse(200, {}, "Profile followed successfully"))
+
+    } else {
+        // user wants to unfollow
+
+        if (!existingFollow) {
+            return res.status(400).json(new ApiError(400, "Profile already not following"))
+        }
+
+        // updating current user's following list
+        await User.findByIdAndUpdate(currentUser, { $pull: { following: followTo } })
+
+        // updating targeted user's followers list
+        await User.findByIdAndUpdate(followTo, { $pull: { followers: currentUser } })
+
+        return res.status(200)
+            .json(new ApiResponse(200, {}, "Profile unfollowed successfully"))
+    }// if else ends here
+
+})
+
+const getFollowingController = asyncHandler(async (req, res) => {
+
+    const userId = req.params.id
+
+    const userFollowing = await User.findById(userId)
+        .populate({
+            path: "following",
+            select: "_id username avatar isVerified"
+        })
+        .select("following")
+
+    // we'll get following even if they are 0, and if not found means the user itself not exist
+    if (!userFollowing) {
+        return res.status(400).json(new ApiError(400, "User not found"))
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, userFollowing, "User following fetched successfully")
+    )
+})
+
+const getFollowersController = asyncHandler(async (req, res) => {
+
+    const userId = req.params.id
+
+    const userFollowers = await User.findById(userId)
+        .populate({
+            path: "followers",
+            select: "_id username avatar isVerified"
+        })
+        .select("followers")
+
+    // we'll get followers even if they are 0, and if not found means the user itself not exist
+    if (!userFollowers) {
+        return res.status(400).json(new ApiError(400, "User not found"))
+    }
+
+    return res.status(200).json(
+        new ApiResponse(200, userFollowers, "User followers fetched successfully")
+    )
+})
+
+
+export {
+    registerController,
+    loginController,
+    logoutController,
+    getUserController,
+    followController,
+    getFollowingController,
+    getFollowersController
+}

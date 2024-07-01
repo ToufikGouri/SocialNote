@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { addPostController, deletePostController, getAllPostsController, getUserPostsController, updatePostController } from "../controllers/posts.controller.js";
+import { addPostController, deletePostController, getAllPostsController, getSavedPostsController, getUserPostsController, updatePostController } from "../controllers/posts.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router()
@@ -9,7 +9,9 @@ router.use(verifyJWT)   // Apply verifyJWT middleware to all routes defined afte
 
 router.route("/").get(getAllPostsController)
 
-router.route('/userposts').get(getUserPostsController)
+router.route('/userposts/:id').get(getUserPostsController)
+
+router.route('/savedposts').get(getSavedPostsController)
 
 router.route("/addpost").post(upload.single("image"), addPostController)
 

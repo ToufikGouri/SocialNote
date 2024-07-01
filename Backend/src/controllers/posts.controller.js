@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import asyncHandler from "../utils/asyncHandler.js";
 import { Post } from "../models/post.model.js"
 import { User } from "../models/user.model.js";
@@ -39,7 +40,9 @@ const getAllPostsController = asyncHandler(async (req, res) => {
 
 const getUserPostsController = asyncHandler(async (req, res) => {
 
-    const posts = await getPostsWithUserInteractions(req.user._id, { "owner._id": req.user._id })
+    const userId = req.params.id
+
+    const posts = await getPostsWithUserInteractions(userId, { "owner._id": new mongoose.Types.ObjectId(userId) })
 
     if (!posts) {
         return res.status(500).json(new ApiError(500, "Error loading posts"))
@@ -47,14 +50,43 @@ const getUserPostsController = asyncHandler(async (req, res) => {
 
     return res
         .status(200)
-        .json(new ApiResponse(200, posts, "Posts fetched successfully"))
+        .json(new ApiResponse(200, posts, "User posts fetched successfully"))
+})
+
+const getSavedPostsController = asyncHandler(async (req, res) => {
+
+    // to understand logic with proper comments refer to getPostsWithUserInteractions util
+
+    const userId = req.user._id
+
+    // const savedPosts = await User.findById(userId)
+    //     .populate({
+    //         path: "savedPosts",
+    //         populate: {
+    //             path: "post",
+    //         }
+    //     }).select("savedPosts")
+
+    const posts = await getPostsWithUserInteractions(req.user._id)
+
+    // needed for aggregation pipeline here but as the data is not too large this also would work fine
+    const savedPosts = posts.filter(val => val.isSaved)
+
+    if (!savedPosts) {
+        return res.status(500).json(new ApiError(500, "Error loading saved posts"))
+    }
+
+    return res
+        .status(200)
+        .json(new ApiResponse(200, savedPosts, "Saved posts fetched successfully"))
+
 })
 
 const addPostController = asyncHandler(async (req, res) => {
 
     const { caption } = req.body
     const { _id, username, avatar, isVerified } = req.user
-    const imageLocalPath = req.file?.path 
+    const imageLocalPath = req.file?.path
 
     if (!caption || !imageLocalPath) {
         return res.status(401).json(new ApiError(401, "Caption or Image is missing"))
@@ -96,7 +128,7 @@ const addPostController = asyncHandler(async (req, res) => {
 })
 
 const updatePostController = asyncHandler(async (req, res) => {
- 
+
     const { caption, _id } = req.body
 
     const post = await Post.findByIdAndUpdate(_id, {
@@ -142,6 +174,7 @@ const deletePostController = asyncHandler(async (req, res) => {
 export {
     getAllPostsController,
     getUserPostsController,
+    getSavedPostsController,
     addPostController,
     updatePostController,
     deletePostController
