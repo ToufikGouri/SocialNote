@@ -52,7 +52,7 @@ const Notes = () => {
             <MyModal modalOpen={modalOpen} setModalOpen={setModalOpen} onNoteAdded={() => { setIsNoteAdded(!isNoteAdded) }} methodHandle={(data) => axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/notes/addnote`, data, { withCredentials: true })} />
 
             {/* Container of all divs */}
-            <div className='flex items-center flex-col'>
+            <div className='flex items-center flex-col max-sm:pt-4 max-sm:pb-16'>
 
                 {notes?.length !== 0 ? (
                     //  If notes available 

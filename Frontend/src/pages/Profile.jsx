@@ -105,7 +105,7 @@ const Profile = ({ ownProfile = true, userData = {} }) => {
 
                             <div className='hidden sm:flex justify-between w-full'>
                                 <p>{user?.posts?.length} posts</p>
-                                <button onClick={() => { setModalFollow(true); handleFollowList("followers") }} >{followersCount} Followers</button>
+                                <button onClick={() => { setModalFollow(true); handleFollowList("followers") }} >{followersCount || user?.followers.length} Followers</button>
                                 <button onClick={() => { setModalFollow(true); handleFollowList("following") }} >{user?.following?.length} Following</button>
                             </div>
 

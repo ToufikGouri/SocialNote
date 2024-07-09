@@ -43,11 +43,11 @@ const ModalProfile = ({ modalOpen, setModalOpen }) => {
         const newBio = bio.trim()
         // don't trim or lowercase passwords
 
-        // if (getTime(user?.updatedAt) === "today") {
-        //     setModalOpen(false)
-        //     toast.warn("Profile can be updated once a day")
-        //     return
-        // }
+        if (getTime(user?.updatedAt) === "today") {
+            setModalOpen(false)
+            toast.warn("Profile can be updated once a day")
+            return
+        }
 
         if (newUsername === user?.username && newEmail === user?.email && newBio === user?.bio && avatar === "" && newPass === "" && oldPass === "") {
             clearFields()
@@ -125,20 +125,20 @@ const ModalProfile = ({ modalOpen, setModalOpen }) => {
                     <div className='flex flex-col items-center relative'>
                         <p className='text-2xl mt-2 font-semibold'>Edit Profile</p>
 
-                        <div className='my-2 mt-5'>
+                        <div className='my-[0.5px] sm:my-1'>
                             <label htmlFor="username" className='font-semibold block'>Username</label>
                             <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" className='rounded-md p-2 w-[270px] border border-black' id='username' placeholder="username..." />
                         </div>
-                        <div className='my-2'>
+                        <div className='my-[0.5px] sm:my-1'>
                             <label htmlFor="email" className='font-semibold block'>Email</label>
                             <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" className='rounded-md p-2 w-[270px] border border-black' id='email' placeholder="email..." />
                         </div>
-                        <div className='my-2 relative'>
+                        <div className='my-[0.5px] sm:my-1 relative'>
                             <label htmlFor="bio" className='font-semibold block'>Bio</label>
                             <textarea value={bio} onChange={(e) => setBio(e.target.value)} className={`rounded-md p-2 w-[270px] border ${bio.length > 150 ? "border-red-500 outline-red-500" : "border-black"} resize-none`} rows={4} id="bio" placeholder='Bio (max 150 characters)...'></textarea>
                             <div className='absolute top-0 right-0'>{bio.length}/150</div>
                         </div>
-                        <div className='my-2'>
+                        <div className='my-[0.5px] sm:my-1'>
                             <label htmlFor="avatar" className='font-semibold block'>New profile image <span className='text-myGrey' >(optional)</span></label>
                             <input ref={avatarRef} onChange={(e) => setAvatar(e.target.files[0])} type="file" accept="image/*" className='rounded-md p-2 w-[270px] border border-black cursor-pointer' id='avatar' />
                         </div>
@@ -150,11 +150,11 @@ const ModalProfile = ({ modalOpen, setModalOpen }) => {
                             <span className='border w-2/5 h-[1px]'></span>
                         </div>
 
-                        <div className='my-2'>
+                        <div className='my-[0.5px] sm:my-1'>
                             <label htmlFor="oldPass" className='font-semibold block'>Old password</label>
                             <input value={oldPass} onChange={(e) => setOldPass(e.target.value)} type="password" className='rounded-md p-2 w-[270px] border border-black' id='oldPass' placeholder="Old password..." />
                         </div>
-                        <div className='my-2'>
+                        <div className='my-[0.5px] sm:my-1'>
                             <label htmlFor="newPass" className='font-semibold block'>New password</label>
                             <input value={newPass} onChange={(e) => setNewPass(e.target.value)} type="password" className='rounded-md p-2 w-[270px] border border-black' id='newPass' placeholder="New password..." />
                         </div>
@@ -162,7 +162,7 @@ const ModalProfile = ({ modalOpen, setModalOpen }) => {
                         {/* Buttons */}
                         <div className='my-1 w-[270px] flex justify-around'>
                             <button onClick={clearFields} className='border border-black text-lg p-1 px-6 smoothHover rounded-3xl'>Close</button>
-                            <button onClick={handleCreate} className='bg-myGreen flex justify-center text-lg p-1 pe-4 ps-6 smoothHover rounded-3xl hover:text-white'>Update</button>
+                            <button onClick={handleCreate} className='bg-myGreen flex justify-center text-lg p-1 px-6 smoothHover rounded-3xl hover:text-white'>Update</button>
                         </div>
 
                         <div className='my-1'>Joined since {user && getTime(user?.createdAt)} </div>
