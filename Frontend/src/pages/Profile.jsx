@@ -35,7 +35,6 @@ const Profile = ({ ownProfile = true, userData = {} }) => {
             setIsFollowing(val)
             setFollowersCount(followersCount + (val ? 1 : -1))
         } catch (error) {
-            console.log("Axios error", error);       // remove this after
             toast.error("Failed to follow")
         }
     }

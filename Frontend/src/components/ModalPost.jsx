@@ -60,7 +60,6 @@ const ModalPost = ({ modalOpen, setModalOpen, updatedImage = null, updatedCaptio
 
                 toast.success("Post uploaded successfully")
             } catch (error) {
-                console.log("Axios error", error);       // remove this after
                 toast.error("Failed to upload post")
             }
         }

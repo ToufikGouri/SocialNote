@@ -44,7 +44,6 @@ const Signup = () => {
                 setPass("")
                 toast.success(`Welcome back ${user.username}`)
             } catch (error) {
-                console.log("Axios error", error);       // remove this after
                 toast.error(error.response?.data?.message || "An error occurred")
             }
 

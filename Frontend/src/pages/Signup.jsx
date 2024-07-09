@@ -66,7 +66,6 @@ const Signup = () => {
                 }
                 toast.success("Account created successfully")
             } catch (error) {
-                console.log("Axios error", error);       // remove this after
                 toast.error(error.response?.data?.message || "An error occurred")
             }
 

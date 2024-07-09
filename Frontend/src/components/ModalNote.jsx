@@ -41,7 +41,6 @@ const MyModal = ({ modalOpen, setModalOpen, onNoteAdded, methodHandle, _id, succ
                 toast.success(`Note ${successMsg} successfully`)
 
             } catch (error) {
-                console.log("Axios error", error);       // remove this after
                 toast.error(error.response?.data?.message || "An error occurred")
             }
 

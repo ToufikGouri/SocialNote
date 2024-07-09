@@ -161,7 +161,6 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
             setPostAllLikes(response.data.data.likes)
 
         } catch (error) {
-            console.log("Axios error", error);       // remove this after
             toast.error("Failed to load comments")
         }
     }
@@ -172,7 +171,6 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
             setPostComments(response.data.data.comments)
 
         } catch (error) {
-            console.log("Axios error", error);       // remove this after
             toast.error("Failed to load comments")
         }
     }
@@ -193,7 +191,6 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
                 setCommentContent("")
                 // setModalOpen(false)
             } catch (error) {
-                console.log("Axios error", error);       // remove this after
                 toast.error("Failed to add comment")
             }
         }
@@ -207,7 +204,6 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
             loadComments()
 
         } catch (error) {
-            console.log("Axios error", error);       // remove this after
             toast.error("Failed to delete comment")
         }
     }
@@ -217,7 +213,6 @@ const Post = ({ _id, owner, image, caption, totalLikes, totalComments, isLiked, 
             await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/follow`, { isFollow: val, followTo: owner._id }, { withCredentials: true })
             setIsFollowing(val)
         } catch (error) {
-            console.log("Axios error", error);       // remove this after
             toast.error("Failed to follow")
         }
     }

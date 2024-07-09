@@ -6,8 +6,6 @@ import { ToastContainer } from 'react-toastify'
 
 const Feed = () => {
 
-    // allPosts, userPosts
-
     const user = useSelector(state => state.user.userData)
     const allPosts = useSelector(state => state.feed.allPosts)
     const loading = useSelector(state => state.feed.loading)
@@ -90,14 +88,8 @@ const Feed = () => {
         }
     ]
 
-
-    console.log("All posts", allPosts);
-    // getting All posts data till this point just using custom data because of overview in development in mobile(can't login backend localhost issue)
-
     return (
         <>
-            {/* <h1>This is feed</h1> */}
-
             <div className="flex flex-col items-center py-12 sm:py-6">
                 {allPosts.map(val =>
                     <Post key={val._id} _id={val._id} owner={val.owner} image={val.image}

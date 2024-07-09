@@ -28,7 +28,6 @@ const Search = () => {
         } catch (error) {
             setSearchResults([])
             setNoResult(true)
-            console.log("Failed to seach", error);
         }
     }
 
