@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
         unique: true,
         trim: true
     },
+    bio: {
+        type: String
+    },
     avatar: {
         type: String,
         default: "https://res.cloudinary.com/duj7aqdfc/image/upload/v1718254501/Users/defaultAvatar.jpg"

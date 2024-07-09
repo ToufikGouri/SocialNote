@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js"
 import { ApiError } from "../utils/ApiError.js"
 import { ApiResponse } from "../utils/ApiResponse.js"
 import uploadOnCloudinary from "../utils/cloudinary.js"
+import getPostsWithUserInteractions from "../utils/getPostsWithUserInteractions.js"
 
 const generateAccessAndRefreshToken = async (userId) => {
     try {
@@ -156,6 +157,87 @@ const logoutController = asyncHandler(async (req, res) => {
 
 })
 
+const updateUserController = asyncHandler(async (req, res) => {
+
+    const { username, email, bio, oldPassword, newPassword } = req.body
+
+    const user = await User.findById(req.user._id)
+
+    if (!user) {
+        return res.status(400).json(new ApiError(400, "User not found"))
+    }
+
+    // if user wants to change password, then check for it first
+    if (oldPassword && newPassword) {
+        const isPasswordValid = await user.isPasswordCorrect(oldPassword)
+
+        if (!isPasswordValid) {
+            return res.status(400).json(new ApiError(400, "Invalid old password"))
+        }
+        user.password = newPassword
+    }
+
+    // if user has provided the avatar image
+    const avatarLocalPath = req.file?.path
+    if (avatarLocalPath) {
+        const avatarURL = await uploadOnCloudinary(avatarLocalPath, "Users")
+
+        if (!avatarURL) {
+            return res.status(500).json(new ApiError(500, "Failed to upload image"))
+        }
+        user.avatar = avatarURL
+    }
+
+    // now updating the user with details
+    // as the newPassword and avatar is handled already above, only check for the username and email
+    if (username) user.username = username
+    if (email) user.email = email
+    if (bio) user.bio = bio
+
+    // Don't use findByIdAndUpdate here becuase the password requires to run for save hook and then it's hasing 
+    // updating it like regular will update the password as it is without hashing it
+    await user.save()
+
+    // removing some fields 
+    user.password = null
+    user.refreshToken = null
+
+    return res.status(200).json(
+        new ApiResponse(200, user, "User details updated successfully")
+    )
+
+})
+
+const resetPasswordController = asyncHandler(async (req, res) => {
+
+    const { username, email, password } = req.body
+
+    const user = await User.findOne({
+        $or: [{ username }, { email }]
+    })
+
+    if (!user) {
+        return res.status(400).json(new ApiError(400, "User not found"))
+    }
+
+    // get the logic for if owner of account only try to reset password
+    // till then it's only for admin
+
+    // Don't use findByIdAndUpdate here becuase the password requires to run for save hook and then it's hasing 
+    // updating it like regular will update the password as it is without hashing it
+    user.password = password
+    await user.save()
+
+    // removing some fields
+    user.password = null
+    user.refreshToken = null
+
+    return res.status(200).json(
+        new ApiResponse(200, user, "Password reset successfully")
+    )
+
+})
+
 const getUserController = asyncHandler(async (req, res) => {
 
     const user = await User.findById(req.user?._id)
@@ -167,6 +249,65 @@ const getUserController = asyncHandler(async (req, res) => {
     return res
         .status(200)
         .json(new ApiResponse(200, user, "User details fetched successfully"))
+
+})
+
+const searchUserController = asyncHandler(async (req, res) => {
+
+    const { searchUser, usernameOnly } = req.query // usernameOnly: Boolean
+
+    // $regex: Specifies the regex pattern as a string.
+    // The ^ anchor forces the match to start from the beginning of the string.
+    // $options: Specifies regex options(flags) as a string, for eg i for case-insensitivity.(We don't actually need it here because we have already lowercase usernames, used just for knowledge)
+
+    // If have to return usernames only
+    if (usernameOnly) {
+        const result = await User.find({ username: { $regex: `^${searchUser}`, $options: "i" } })
+
+        if (result.length === 0) {
+            return res.status(400).json(new ApiError(400, "User does not exist"))
+        }
+
+        // return only specific values only
+        const allUsernames = result.map(val => { return { _id: val._id, username: val.username } })
+
+        return res.status(200).json(
+            new ApiResponse(200, allUsernames, "Usernames fetched successfully")
+        )
+    }
+
+    // If have to return whole user data
+    let user = await User.findOne({ username: searchUser })
+        .populate({
+            path: "following",
+            select: "_id username avatar isVerified"
+        })
+        .populate({
+            path: "followers",
+            select: "_id username avatar isVerified"
+        })
+
+    if (!user) {
+        return res.status(400).json(new ApiError(400, "User does not exist"))
+    }
+
+    const userPosts = (await getPostsWithUserInteractions(user._id, { "owner._id": user._id })).reverse()
+    user = { ...user._doc, posts: userPosts }
+    // we can't overwrite the posts directly because here we got the populated posts and in 
+    // post model we storing them in _id, so they will be stored in _id form again because of mongoose 
+    // so to avoid this use created a new plain object then overwrite the posts
+
+    // removing some fields
+    user.email = null
+    user.email = null
+    user.password = null
+    user.refreshToken = null
+    user.notes = null
+    user.savedPosts = null
+
+    return res.status(200).json(
+        new ApiResponse(200, user, "User details fetched successfully")
+    )
 
 })
 
@@ -261,7 +402,10 @@ export {
     registerController,
     loginController,
     logoutController,
+    updateUserController,
+    resetPasswordController,
     getUserController,
+    searchUserController,
     followController,
     getFollowingController,
     getFollowersController

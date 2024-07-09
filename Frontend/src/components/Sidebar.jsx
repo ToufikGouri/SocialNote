@@ -1,35 +1,26 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import React, { useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import HomeLogo from "../assets/Posts Assets/Home.png"
 import SearchLogo from "../assets/Posts Assets/Search.png"
 import CreateLogo from "../assets/Posts Assets/Create.png"
 import EditNoteLogo from "../assets/Posts Assets/EditNote.png"
 import SocialNoteLogo from "../assets/SocialNote Logo.png"
-import axios from "axios"
-import { useSelector, useDispatch } from "react-redux"
-import { getUserData, setUserData, setUserLog, sortNotesBy } from '../redux/userSlice'
-import { toast } from "react-toastify"
+import { useSelector } from "react-redux"
 import ModalPost from './ModalPost'
 
 const Sidebar = () => {
 
-    const [activePage, setActivePage] = useState("/")
     const [modalOpen, setModalOpen] = useState(false)
     const isLoggedIn = useSelector(state => state.user.isLoggedIn) || false
     const user = useSelector(state => state.user.userData)
-    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const { pathname } = useLocation()
 
-    useEffect(() => {
-        dispatch(getUserData())
-    }, [isLoggedIn])
-
-    const handleLogout = async () => {
-        await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/v1/users/logout`, {}, { withCredentials: true }).then(() => { toast.success("Logout successfully") })
-        dispatch(setUserLog(false))
-        dispatch(sortNotesBy("Clear"))
-        dispatch(setUserData(null))
-        navigate("/")
+    if (pathname === "/") {
+        document.title = `SocialNotes`
+    } else {
+        const page = pathname.charAt(1).toUpperCase() + pathname.slice(2)
+        document.title = `${page} | SocialNotes`
     }
 
     return (
@@ -51,28 +42,28 @@ const Sidebar = () => {
 
                 {/* Other buttons */}
                 <div className="flex sm:flex-col justify-evenly items-center h-14 w-full sm:h-2/3 sm:w-1/3">
-                    <div onClick={() => { navigate("/"); setActivePage("/") }} className={`flex items-center cursor-pointer smoothHover hover:invert-0 ${activePage === "/" ? "" : "invert-[0.5]"}`}>
+                    <div onClick={() => navigate("/")} className={`flex items-center cursor-pointer smoothHover hover:invert-0 ${pathname === "/" ? "" : "invert-[0.5]"}`}>
                         <button className='h-8 w-8 bgImgProps' style={{ backgroundImage: `url(${HomeLogo})` }}></button>
                         <p className='hidden sm:block font-semibold ms-3'>Home</p>
                     </div>
-                    <div onClick={() => { navigate("/"); setActivePage("/") }} className={`flex items-center cursor-pointer smoothHover hover:invert-0 isActiveColorLogic`}>
+                    <div onClick={() => navigate("/search")} className={`flex items-center cursor-pointer smoothHover hover:invert-0 ${pathname === "/search" ? "" : "invert-[0.5]"}`}>
                         <button className='h-8 w-8 bgImgProps' style={{ backgroundImage: `url(${SearchLogo})` }}></button>
                         <p className='hidden sm:block font-semibold ms-2'>Search</p>
                     </div>
-                    <div onClick={() => { setModalOpen(true) }} className={`flex items-center cursor-pointer smoothHover hover:invert-0 isActiveColorLogic`}>
+                    <div onClick={() => { setModalOpen(true) }} className={`flex items-center cursor-pointer smoothHover hover:invert-0 ${modalOpen ? "" : "invert-[0.5]"}`}>
                         <button className='h-8 w-8 bgImgProps' style={{ backgroundImage: `url(${CreateLogo})` }}></button>
                         <p className='hidden sm:block font-semibold ms-3'>Create</p>
                     </div>
-                    <div onClick={() => { navigate("/notes"); setActivePage("/notes") }} className={`flex items-center cursor-pointer smoothHover hover:invert-0 ${activePage === "/notes" ? "" : "invert-[0.5]"}`}>
+                    <div onClick={() => navigate("/notes")} className={`flex items-center cursor-pointer smoothHover hover:invert-0 ${pathname === "/notes" ? "" : "invert-[0.5]"}`}>
                         <button className='h-8 w-8 bgImgProps' style={{ backgroundImage: `url(${EditNoteLogo})` }}></button>
                         <p className='hidden sm:block font-semibold ms-3'>Notes</p>
                     </div>
-                    <div onClick={() => { navigate("/"); setActivePage("/") }} className={`flex items-center cursor-pointer smoothHover hover:invert-0`}>
+                    <div onClick={() => navigate("/profile")} className={`flex items-center cursor-pointer smoothHover hover:invert-0`}>
                         <button className='h-8 w-8 bg-no-repeat bg-cover bg-center rounded-full border border-black' style={{ backgroundImage: `url(${user?.avatar})` }}></button>
-                        <p className='hidden sm:block font-semibold ms-3 isActiveColorLogic'>Profile</p>
+                        <p className={`hidden sm:block font-semibold ms-3 ${pathname === "/profile" ? "" : "invert-[0.5]"}`}>Profile</p>
                     </div>
                 </div>
-            </div>
+            </div >
 
             <ModalPost modalOpen={modalOpen} setModalOpen={setModalOpen} />
         </>

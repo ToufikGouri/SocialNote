@@ -9,12 +9,6 @@ const Home = () => {
     const isLoggedIn = useSelector(state => state.user.isLoggedIn) || false
     const loading = useSelector(state => state.user.loading)
 
-    if(isLoggedIn){
-        document.title = "Feed | SocialNotes"
-    }else{
-        document.title = "SocialNotes"
-    }
-
     if (loading) {
         return <div className='h-[90vh] flex justify-center items-center' ><img className='h-32' src={LoadingLogo} alt="Loading..." /></div>
     }

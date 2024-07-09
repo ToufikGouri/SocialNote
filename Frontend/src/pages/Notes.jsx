@@ -40,7 +40,6 @@ const Notes = () => {
         if (isLoggedIn) {
             dispatch(getUserNotes())
         }
-        document.title = "Notes | SocialNotes"
     }, [isNoteAdded, isLoggedIn])
 
     if (loading) {

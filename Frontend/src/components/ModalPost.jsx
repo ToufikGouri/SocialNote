@@ -4,17 +4,18 @@ import DeleteLogo from "../assets/Notes Assets/Cancel.png"
 import UploadIcon from "../assets/Posts Assets/UploadIcon.png"
 import UploadImage from "../assets/Posts Assets/UploadImage.png"
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { getAllPosts, getUserAllPosts } from '../redux/feedSlice'
 
 const ModalPost = ({ modalOpen, setModalOpen, updatedImage = null, updatedCaption = "", disableImageUpload = false, handleEditPost }) => {
 
     const [caption, setCaption] = useState(updatedCaption)
     const [postImage, setPostImage] = useState(updatedImage)
     const [previewImage, setPreviewImage] = useState(updatedImage)
-    const [refreshPosts, setRefreshPosts] = useState(false)
     const imageRef = useRef(null)
     const user = useSelector(state => state.user.userData)
+    const dispatch = useDispatch()
 
     useEffect(() => {
 
@@ -27,7 +28,7 @@ const ModalPost = ({ modalOpen, setModalOpen, updatedImage = null, updatedCaptio
             return () => URL.revokeObjectURL(objectURL)
         }
 
-    }, [postImage, refreshPosts])
+    }, [postImage])
 
     const handleAddPost = async () => {
 
@@ -52,6 +53,9 @@ const ModalPost = ({ modalOpen, setModalOpen, updatedImage = null, updatedCaptio
                 })
                 setCaption("")
                 setModalOpen(false)
+                // updating posts
+                dispatch(getAllPosts())
+                dispatch(getUserAllPosts())
                 imageRef.current.value = null
 
                 toast.success("Post uploaded successfully")

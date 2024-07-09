@@ -17,9 +17,18 @@ export const getUserAllPosts = createAsyncThunk(
     }
 )
 
+export const getUserSavedPosts = createAsyncThunk(
+    "feed/fetchUserSavedPosts",
+    async () => {
+        return await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/v1/feed/savedposts`, { withCredentials: true })
+            .then(res => res.data.data.reverse())
+    }
+)
+
 const initialState = {
     allPosts: [],
-    userPosts: [],
+    userPosts: null,
+    savedPosts: null,
     loading: false
 }
 
@@ -50,6 +59,19 @@ export const feedSlice = createSlice({
                 state.loading = false
             })
             .addCase(getUserAllPosts.rejected, (state) => {
+                state.loading = false
+            })
+
+        // user saved posts case
+        builder
+            .addCase(getUserSavedPosts.pending, (state) => {
+                state.loading = true
+            })
+            .addCase(getUserSavedPosts.fulfilled, (state, action) => {
+                state.savedPosts = action.payload
+                state.loading = false
+            })
+            .addCase(getUserSavedPosts.rejected, (state) => {
                 state.loading = false
             })
 

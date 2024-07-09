@@ -9,7 +9,7 @@ router.use(verifyJWT)   // Apply verifyJWT middleware to all routes defined afte
 
 router.route("/").get(getAllPostsController)
 
-router.route('/userposts/:id').get(getUserPostsController)
+router.route('/userposts').get(getUserPostsController)
 
 router.route('/savedposts').get(getSavedPostsController)
 

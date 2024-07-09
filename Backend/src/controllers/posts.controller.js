@@ -40,9 +40,7 @@ const getAllPostsController = asyncHandler(async (req, res) => {
 
 const getUserPostsController = asyncHandler(async (req, res) => {
 
-    const userId = req.params.id
-
-    const posts = await getPostsWithUserInteractions(userId, { "owner._id": new mongoose.Types.ObjectId(userId) })
+    const posts = await getPostsWithUserInteractions(req.user._id, { "owner._id": req.user._id })
 
     if (!posts) {
         return res.status(500).json(new ApiError(500, "Error loading posts"))

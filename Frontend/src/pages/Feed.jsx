@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllPosts, getUserAllPosts } from '../redux/feedSlice'
+import { getAllPosts } from '../redux/feedSlice'
 import Post from '../components/Post'
 import { ToastContainer } from 'react-toastify'
 
@@ -8,14 +8,16 @@ const Feed = () => {
 
     // allPosts, userPosts
 
+    const user = useSelector(state => state.user.userData)
     const allPosts = useSelector(state => state.feed.allPosts)
     const loading = useSelector(state => state.feed.loading)
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getAllPosts())
-        dispatch(getUserAllPosts())
-    }, [])
+        if (allPosts?.length === 0) {
+            dispatch(getAllPosts())
+        }
+    }, [allPosts])
 
     const data = [
         {
@@ -100,7 +102,7 @@ const Feed = () => {
                 {allPosts.map(val =>
                     <Post key={val._id} _id={val._id} owner={val.owner} image={val.image}
                         caption={val.caption} totalLikes={val.totalLikes} totalComments={val.totalComments} uploadTime={val.createdAt}
-                        isLiked={val.isLiked} isCommented={val.isCommented} isSaved={val.isSaved} isVerified={val.isVerified} />
+                        isLiked={val.isLiked} isCommented={val.isCommented} isSaved={val.isSaved} isVerified={val.isVerified} following={user?.following.includes(val.owner._id)} />
                 )}
             </div>
 

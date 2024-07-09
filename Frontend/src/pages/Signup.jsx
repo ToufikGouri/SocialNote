@@ -49,7 +49,7 @@ const Signup = () => {
                         "Content-Type": "multipart/form-data"
                     },
                     withCredentials: true
-                })
+                }).then((res) => res.data.data.user)
 
                 dispatch(setUserLog(true))
                 dispatch(setUserData(user))
@@ -61,6 +61,7 @@ const Signup = () => {
                 setPass("")
                 setConfPass("")
                 if (avatarRef.current) {
+                    setAvatar("")
                     avatarRef.current.value = null
                 }
                 toast.success("Account created successfully")
@@ -89,8 +90,8 @@ const Signup = () => {
                             <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" className='rounded-md p-2 w-[270px] border border-black' id='email' placeholder='email...' />
                         </div>
                         <div className='my-2'>
-                            <label htmlFor="avatar" className='font-semibold block'>Avatar <span className='text-myGrey' >(optional)</span></label>
-                            <input ref={avatarRef} onChange={(e) => setAvatar(e.target.files[0])} type="file" className='rounded-md p-2 w-[270px] border border-black' id='avatar' />
+                            <label htmlFor="avatar" className='font-semibold block'>Profile image <span className='text-myGrey' >(optional)</span></label>
+                            <input ref={avatarRef} onChange={(e) => setAvatar(e.target.files[0])} type="file" accept="image/*" className='rounded-md p-2 w-[270px] border border-black cursor-pointer' id='avatar' />
                         </div>
                         <div className='my-2'>
                             <label htmlFor="pass" className='font-semibold block'>Password</label>
